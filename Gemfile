@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.16'
+ruby '2.1.5'
 
 
 group :development, :test do
