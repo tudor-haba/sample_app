@@ -96,8 +96,9 @@ footer {
 	ul{
 		float: right;
 		list-style: none;
-		float: left;
-		margin-left: 10px;
-
+		li {
+			float: left;
+			margin-left: 10px;
+		}
 	}
 }
