@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.16'
 gem 'bootstrap-sass', '2.1'
 gem 'rake', '< 11.0'
+gem 'bcrypt-ruby', '3.0.1'
 
 ruby "2.1.5"
 
