@@ -10,7 +10,7 @@ ruby "2.1.5"
 
 group :development, :test do
 	gem 'sqlite3', '1.3.5'
-	gem 'rspec-rails', '2.11.0'
+  gem 'rspec-rails', '2.11.0'
 end
 
 group :development do 
@@ -29,6 +29,7 @@ gem 'jquery-rails', '2.0.2'
 group :test do
 	gem 'capybara', '1.1.2'
  	gem 'libnotify', '0.5.9'
+ 	gem 'factory_bot_rails'
 end
 
 group :production do
