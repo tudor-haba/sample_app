@@ -39,6 +39,12 @@ describe User do
 		it { should be_admin }
 	end
 
+
+# CH9 EX1
+	describe "admin attribute isn't accessible" do
+
+	end
+
 	describe "remember_token" do
 		before { @user.save }
 		its(:remember_token) { should_not be_blank }
