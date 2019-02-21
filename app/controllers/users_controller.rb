@@ -5,6 +5,7 @@ class UsersController < ApplicationController
 
  def show	
  	@user = User.find(params[:id])
+      @microposts = @user.microposts.paginate(page: params[:page])
  end
 
   def new 
@@ -33,7 +34,7 @@ class UsersController < ApplicationController
   def edit 
   end
 
-  def destroy
+    def destroy
     @user = User.find(params[:id])
     if !@user.admin?
       @user.destroy
