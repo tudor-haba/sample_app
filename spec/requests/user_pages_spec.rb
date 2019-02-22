@@ -79,7 +79,7 @@ describe "UserPages" do
 				fill_in "Name",				with: "Example User"
 				fill_in "Email",				with: "user@example.com"
 				fill_in "Password",				with: "foobar"
-				fill_in "Confirm Password",				with: "foobar"
+				fill_in "Confirmation",				with: "foobar"
 			end
 		
 			describe "after saving the user" do
@@ -119,12 +119,15 @@ describe "UserPages" do
 		end
 	
  		describe "with valid information" do
-     before do
-				fill_in "Name",				with: "Example User"
-				fill_in "Email",				with: "user@example.com"
-				fill_in "Password",				with: "foobar"
-				fill_in "Confirm Password",				with: "foobar"
-			end
+     let(:new_name)  { "New Name" }
+      let(:new_email) { "new@example.com" }
+      before do
+        fill_in "Name",             with: new_name
+        fill_in "Email",            with: new_email
+        fill_in "Password",         with: user.password
+        fill_in "Confirm Password", with: user.password
+        click_button "Save changes"
+      end
 
       it { should have_selector('title', text: new_name) }
       it { should have_selector('div.alert.alert-success') }
