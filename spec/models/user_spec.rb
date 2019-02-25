@@ -28,6 +28,7 @@ describe User do
 	it { should respond_to(:admin) }
 	it { should respond_to(:authenticate) }
 	it { should respond_to(:microposts) }
+	it { should respond_to(:feed) }
 
 	it { should be_valid }
 	it { should_not be_admin }
@@ -169,5 +170,18 @@ describe User do
 			it "should have the right microposts in the right order" do
 				@user.microposts.should == [newer_micropost, older_micropost]
 			end
+		
+
+			describe "status" do
+				let(:unfollowed_post) do
+					FactoryBot.create(:micropost, user: FactoryBot.create(:user))
+				end
+
+				its(:feed) { should include(newer_micropost) }
+				its(:feed) { should include(older_micropost) }
+				its(:feed) { should include(unfollowed_post) }
+			end
+
+
 		end
 end

@@ -68,30 +68,25 @@ describe "AuthenticationPages" do
           visit edit_user_path(user)
           sign_in user 
         end
+        it "should render the desired protected page" do
+          page.should have_selector('title', text: 'Edit user')
+        end
 
-        describe "after signing in" do
-
-          it "should render the desired protected page" do
-            page.should have_selector('title', text: 'Edit user')
+        describe "when signing in again" do
+          before do
+            delete signout_path
+            visit signin_path
+            sign_in user
           end
 
-          describe "when signing in again" do
-            before do
-              delete signout_path
-              visit signin_path
-              sign_in user
-            end
-
-            it "should render the default (profile) page" do
-              page.should have_selector('title', text: user.name)
-            end
+          it "should render the default (profile) page" do
+            page.should have_selector('title', text: user.name)
+          end
         end
       end
 
 
-       describe "in the Microposts controller" do
-
-        before { click_link "Sign out" }
+      describe "in the Microposts controller" do
 
         describe "submitting to the create action" do
           before { post microposts_path }
@@ -103,10 +98,6 @@ describe "AuthenticationPages" do
           specify { response.should redirect_to(signin_path) }
         end
       end
-
-
-    end
-
       describe "in the Users controller" do
         describe "visiting the edit page" do
           before { visit edit_user_path(user) }
