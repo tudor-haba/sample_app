@@ -33,6 +33,35 @@ describe "StaticPages" do
 					page.should have_selector("li##{item.id}", text: item.content)
 				end
 			end
+
+			describe "Micropost count" do
+    		before { visit root_path }
+ 	 	  	it { should have_content("2 microposts") }
+   		end
+
+   		describe "micropost pagination" do
+   			before { visit root_path }
+   			let(:user) { FactoryBot.create(:user) }
+   			before do
+   				29.times { FactoryBot.create(:micropost, user: user) }
+   				sign_in user
+					visit root_path
+   			end
+   			it { should have_selector("div.pagination") }
+   		end
+
+   		describe "Deletion of posts not created by user" do
+   			let(:user) { FactoryBot.create(:user) }
+   		  let!(:m1) { FactoryBot.create(:micropost, user: user, content: "Foo") }
+   			let(:user2) { FactoryBot.create(:user) }
+   			before do 
+   				sign_in user2
+   				visit user_path(user)
+   			end
+   			it { should_not have_link('delete') }
+   		end
+
+
 		end
 	end
 
