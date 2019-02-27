@@ -12,14 +12,14 @@
 require 'spec_helper'
 
 describe User do
-	before do 
+	before do
 		@user = User.new(name: "Example User", email: "user@example.com",
-								password: "foobar", password_confirmation: "foobar") 
+								password: "foobar", password_confirmation: "foobar")
 	end
 
 	subject { @user }
 	it { should respond_to(:name) }
-	it { should respond_to(:email) } 
+	it { should respond_to(:email) }
 	it { should respond_to(:password_digest) }
 	it { should respond_to(:password) }
 	it { should respond_to(:password_confirmation) }
@@ -35,7 +35,7 @@ describe User do
 	it { should respond_to(:follow!) }
 	it { should respond_to(:unfollow!) }
 
-	
+
 
 	it { should be_valid }
 	it { should_not be_admin }
@@ -96,12 +96,12 @@ describe User do
 	end
 
 	describe "when email addresses is already taken" do
-		before do 
+		before do
 			user_with_same_email = @user.dup
 			user_with_same_email.email = @user.email.upcase
 			user_with_same_email.save
 		end
-		
+
 		it { should_not be_valid }
 	end
 
@@ -173,22 +173,34 @@ describe User do
 			end
 
 
-		
+
 			it "should have the right microposts in the right order" do
 				@user.microposts.should == [newer_micropost, older_micropost]
 			end
-		
 
-			describe "status" do
-				let(:unfollowed_post) do
-					FactoryBot.create(:micropost, user: FactoryBot.create(:user))
-				end
 
-				its(:feed) { should include(newer_micropost) }
-				its(:feed) { should include(older_micropost) }
-				its(:feed) { should include(unfollowed_post) }
-			end
+		  describe "status" do
+		    let(:unfollowed_post) do
+		      FactoryBot.create(:micropost, user: FactoryBot.create(:user))
+		    end
+		    let(:followed_user) { FactoryBot.create(:user) }
+
+		    before do
+		      @user.follow!(followed_user)
+		      3.times { followed_user.microposts.create!(content: "Lorem ipsum") }
+		    end
+
+		    its(:feed) { should include(newer_micropost) }
+		    its(:feed) { should include(older_micropost) }
+		    its(:feed) { should_not include(unfollowed_post) }
+		    its(:feed) do
+		      followed_user.microposts.each do |micropost|
+		        should include(micropost)
+		      end
+		    end
+		  end
 		end
+
 		describe "following" do
 			let(:other_user) { FactoryBot.create(:user) }
 			before do
