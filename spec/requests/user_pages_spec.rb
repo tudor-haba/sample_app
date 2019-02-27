@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "UserPages" do	
+describe "UserPages" do
 
 	subject { page }
 
@@ -9,7 +9,7 @@ describe "UserPages" do
 	describe "index" do
 
 		let(:user) { FactoryBot.create(:user) }
-		
+
 		before(:each) do
 			sign_in user
 			visit users_path
@@ -30,7 +30,7 @@ describe "UserPages" do
 				end
 			end
 		end
-		
+
 		describe "delete links" do
 
 			it { should_not have_link('delete') }
@@ -58,14 +58,14 @@ describe "UserPages" do
 
 	describe "signup" do
 		before {visit signup_path}
-		
+
 		let(:submit) {"Create my account"}
 
 		describe "with invalid information" do
 			it "should not create a user" do
 				expect {click_button submit}.not_to change(User, :count)
 			end
-	
+
 
 			describe "after submission" do
       	before { click_button submit }
@@ -81,7 +81,7 @@ describe "UserPages" do
 				fill_in "Password",				with: "foobar"
 				fill_in "Confirmation",				with: "foobar"
 			end
-		
+
 			describe "after saving the user" do
 				before { click_button submit }
 				let(:user) { User.find_by_email('user@example.com') }
@@ -117,7 +117,7 @@ describe "UserPages" do
 
 			it { should have_content('error') }
 		end
-	
+
  		describe "with valid information" do
      let(:new_name)  { "New Name" }
       let(:new_email) { "new@example.com" }
@@ -155,7 +155,7 @@ describe "UserPages" do
       it { should have_content(user.microposts.count) }
     end
 
-describe "follow/unfollow buttons" do
+    describe "follow/unfollow buttons" do
       let(:other_user) { FactoryBot.create(:user) }
       before { sign_in user }
 
@@ -205,7 +205,7 @@ describe "follow/unfollow buttons" do
       end
     end
   end
-	
+
 	describe "following/followers" do
    	let(:user) { FactoryBot.create(:user) }
    	let(:other_user) { FactoryBot.create(:user) }
@@ -216,7 +216,7 @@ describe "follow/unfollow buttons" do
        	sign_in user
        	visit following_user_path(user)
      	end
-      	
+
       it { should have_selector('title', text: full_title('Following')) }
      	it { should have_selector('h3', text: 'Following') }
      	it { should have_link(other_user.name, href: user_path(other_user)) }
@@ -231,5 +231,14 @@ describe "follow/unfollow buttons" do
      	it { should have_selector('h3', text: 'Followers') }
      	it { should have_link(user.name, href: user_path(user)) }
    	end
+    describe "follower/following counts" do
+      let(:other_user) { FactoryBot.create(:user) }
+      before do
+        other_user.follow!(user)
+        visit user_path(user)
+      end
+      it { should have_link("1 following", href: following_user_path(user)) }
+      it { should have_link("1 followers", href: followers_user_path(user)) }
+    end
  	end
 end
